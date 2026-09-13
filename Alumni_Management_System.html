@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>International Islamic University Chittagong — Alumni Portal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#1D4B34;
+  --navy-deep:#0F2E1D;
+  --maroon:#8C2F39;
+  --maroon-deep:#701F28;
+  --gold:#B98B3E;
+  --paper:#F7F6F2;
+  --panel:#FFFFFF;
+  --ink:#23241F;
+  --ink-soft:#5B5C55;
+  --line:#DEDACF;
+  --green:#3F7A5C;
+  --shadow:0 1px 2px rgba(31,42,68,0.06);
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  font-family:'IBM Plex Sans',sans-serif;
+  background:var(--paper);
+  color:var(--ink);
+  min-height:100vh;
+}
+h1,h2,h3,.serif{font-family:'Fraunces',serif;}
+button{font-family:inherit;cursor:pointer;}
+input,select,textarea{font-family:inherit;}
+a{color:inherit;}
+
+.crest{
+  width:40px;height:40px;border-radius:50%;
+  background:radial-gradient(circle at 30% 30%, var(--gold), var(--maroon-deep));
+  display:flex;align-items:center;justify-content:center;
+  color:#fff;font-family:'Fraunces',serif;font-weight:600;font-size:15px;
+  flex-shrink:0;
+  box-shadow:0 0 0 2px rgba(255,255,255,0.15) inset;
+}
+
+/* ---------- LOGIN ---------- */
+#loginScreen{
+  min-height:100vh;
+  display:flex;
+  align-items:stretch;
+}
+.login-visual{
+  flex:1.1;
+  background:
+    linear-gradient(160deg, var(--navy-deep) 0%, var(--navy) 60%, #2B6A44 130%);
+  color:#F3EFE3;
+  padding:64px;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  position:relative;
+  overflow:hidden;
+}
+.login-visual::after{
+  content:"";
+  position:absolute;
+  right:-120px;bottom:-120px;
+  width:420px;height:420px;
+  border-radius:50%;
+  border:1px solid rgba(243,239,227,0.15);
+}
+.login-visual::before{
+  content:"";
+  position:absolute;
+  right:-40px;bottom:-40px;
+  width:420px;height:420px;
+  border-radius:50%;
+  border:1px solid rgba(243,239,227,0.1);
+}
+.login-brand{display:flex;align-items:center;gap:14px;}
+.login-brand .crest{width:52px;height:52px;font-size:19px;}
+.login-brand-name{font-size:15px;letter-spacing:.02em;color:#D9CBB0;}
+.login-brand-sub{font-family:'Fraunces',serif;font-size:20px;color:#F3EFE3;}
+.login-quote{max-width:480px;position:relative;z-index:1;}
+.login-quote h2{font-size:38px;line-height:1.15;font-weight:500;margin:0 0 18px;color:#FBF9F3;}
+.login-quote p{font-size:15px;line-height:1.7;color:#CFC6B4;margin:0;}
+.login-stats{display:flex;gap:36px;position:relative;z-index:1;}
+.login-stats div b{display:block;font-family:'Fraunces',serif;font-size:26px;color:#F3EFE3;}
+.login-stats div span{font-size:12.5px;color:#B9AE95;}
+
+.login-form-side{
+  flex:1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:48px;
+  background:var(--paper);
+}
+.login-card{width:100%;max-width:360px;}
+.login-card h1{font-size:26px;margin:0 0 6px;font-weight:600;}
+.login-card .lede{color:var(--ink-soft);font-size:14px;margin:0 0 30px;}
+.field{margin-bottom:16px;}
+.field label{display:block;font-size:12.5px;color:var(--ink-soft);margin-bottom:6px;}
+.field input,.field select,.field textarea{
+  width:100%;padding:10px 12px;border:1px solid var(--line);
+  border-radius:3px;font-size:14.5px;background:#fff;color:var(--ink);
+}
+.field input:focus,.field select:focus,.field textarea:focus{
+  outline:none;border-color:var(--maroon);box-shadow:0 0 0 3px rgba(140,47,57,0.12);
+}
+.btn{
+  border:none;border-radius:3px;padding:11px 18px;font-size:14.5px;font-weight:600;
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+}
+.btn-primary{background:var(--maroon);color:#fff;width:100%;}
+.btn-primary:hover{background:var(--maroon-deep);}
+.btn-ghost{background:transparent;color:var(--navy);border:1px solid var(--line);}
+.btn-ghost:hover{border-color:var(--navy);}
+.btn-sm{padding:7px 12px;font-size:13px;}
+.login-toggle{margin-top:20px;font-size:13.5px;color:var(--ink-soft);text-align:center;}
+.login-toggle button{background:none;border:none;color:var(--maroon);font-weight:600;padding:0;font-size:13.5px;}
+.demo-roles{display:flex;gap:8px;margin-top:22px;}
+.demo-roles button{flex:1;}
+.error-msg{color:var(--maroon);font-size:13px;margin:-6px 0 14px;}
+
+/* ---------- SHELL ---------- */
+.shell{display:flex;min-height:100vh;}
+.sidebar{
+  width:236px;flex-shrink:0;background:var(--navy-deep);color:#E7E2D3;
+  display:flex;flex-direction:column;padding:22px 16px;
+}
+.sidebar-brand{display:flex;align-items:center;gap:10px;padding:4px 8px 22px;border-bottom:1px solid rgba(231,226,211,0.12);margin-bottom:18px;}
+.sidebar-brand-text{font-family:'Fraunces',serif;font-size:15.5px;line-height:1.25;color:#F3EFE3;}
+.sidebar-brand-text small{display:block;font-family:'IBM Plex Sans';font-size:10.5px;color:#9C947F;letter-spacing:.03em;}
+.nav-group{margin-bottom:18px;}
+.nav-group-label{font-size:10.5px;color:#7C7562;padding:0 10px 6px;letter-spacing:.04em;}
+.nav-item{
+  display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:4px;
+  font-size:13.8px;color:#D6D0BE;margin-bottom:2px;border:none;background:none;width:100%;text-align:left;
+}
+.nav-item:hover{background:rgba(231,226,211,0.06);}
+.nav-item.active{background:var(--maroon);color:#fff;}
+.nav-item .dot{width:6px;height:6px;border-radius:50%;background:currentColor;opacity:.55;flex-shrink:0;}
+.sidebar-foot{margin-top:auto;border-top:1px solid rgba(231,226,211,0.12);padding-top:14px;display:flex;align-items:center;gap:10px;}
+.sidebar-foot .who{flex:1;min-width:0;}
+.sidebar-foot .who b{display:block;font-size:13px;color:#F3EFE3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.sidebar-foot .who span{font-size:11px;color:#9C947F;text-transform:capitalize;}
+.sidebar-foot button{background:none;border:none;color:#9C947F;font-size:12px;padding:4px;}
+.sidebar-foot button:hover{color:#F3EFE3;}
+
+.content{flex:1;padding:38px 46px;max-width:1180px;}
+.page-header{margin-bottom:28px;border-bottom:1px solid var(--line);padding-bottom:18px;position:relative;}
+.page-header::after{content:"";position:absolute;left:0;bottom:-1px;width:52px;height:2px;background:var(--gold);}
+.page-header h1{font-size:27px;margin:0 0 6px;font-weight:600;}
+.page-header p{margin:0;color:var(--ink-soft);font-size:14px;}
+.page-header-row{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap;}
+
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:4px;}
+.panel-top-rule{border-top:3px solid var(--maroon);}
+.panel-pad{padding:22px 24px;}
+
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:30px;}
+.stat-card{background:var(--panel);border:1px solid var(--line);border-top:3px solid var(--gold);padding:18px 18px;border-radius:4px;}
+.stat-card b{display:block;font-family:'Fraunces',serif;font-size:28px;font-weight:600;color:var(--navy);}
+.stat-card span{font-size:12.5px;color:var(--ink-soft);}
+
+.section-title{font-size:15.5px;font-weight:600;margin:0 0 14px;display:flex;align-items:center;justify-content:space-between;}
+.two-col{display:grid;grid-template-columns:1.4fr 1fr;gap:22px;}
+
+table{width:100%;border-collapse:collapse;font-size:13.8px;}
+th{
+  text-align:left;font-size:11.5px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.03em;
+  padding:9px 12px;border-bottom:1px solid var(--line);font-weight:600;
+}
+td{padding:11px 12px;border-bottom:1px solid var(--line);vertical-align:middle;}
+tr:last-child td{border-bottom:none;}
+
+.pill{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;padding:3px 9px;border-radius:20px;font-weight:600;}
+.pill-green{background:#E7F1EB;color:var(--green);}
+.pill-gold{background:#F5EBD6;color:#8A6A24;}
+.pill-maroon{background:#F3E4E5;color:var(--maroon-deep);}
+.pill-gray{background:#EDEBE3;color:var(--ink-soft);}
+
+.avatar{
+  width:34px;height:34px;border-radius:50%;background:var(--navy);color:#F3EFE3;
+  display:flex;align-items:center;justify-content:center;font-size:12.5px;font-weight:600;flex-shrink:0;
+  font-family:'Fraunces',serif;
+}
+
+.toolbar{display:flex;gap:10px;margin-bottom:18px;flex-wrap:wrap;align-items:center;}
+.toolbar input[type=text],.toolbar select{
+  padding:9px 12px;border:1px solid var(--line);border-radius:3px;font-size:13.5px;background:#fff;
+}
+.toolbar input[type=text]{flex:1;min-width:200px;}
+
+.card-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;}
+.entity-card{background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:18px 20px;}
+.entity-card-head{display:flex;gap:12px;align-items:flex-start;margin-bottom:10px;}
+.entity-card-head .meta b{display:block;font-size:14.5px;}
+.entity-card-head .meta span{font-size:12.5px;color:var(--ink-soft);}
+.entity-card p{margin:8px 0;font-size:13.3px;color:var(--ink-soft);line-height:1.55;}
+.entity-card-foot{display:flex;justify-content:space-between;align-items:center;margin-top:14px;padding-top:12px;border-top:1px solid var(--line);}
+
+.progress-track{height:7px;background:#EDEBE3;border-radius:20px;overflow:hidden;margin:10px 0 6px;}
+.progress-fill{height:100%;background:var(--gold);}
+
+.forum-post{padding:16px 0;border-bottom:1px solid var(--line);}
+.forum-post:last-child{border-bottom:none;}
+.forum-post-head{display:flex;gap:10px;align-items:center;margin-bottom:8px;}
+.forum-post-head b{font-size:13.8px;}
+.forum-post-head span{font-size:12px;color:var(--ink-soft);}
+.forum-post p{margin:0 0 8px;font-size:13.8px;line-height:1.6;}
+.forum-comment{margin-left:44px;padding:8px 0;font-size:13px;border-top:1px dashed var(--line);}
+.forum-comment b{font-size:12.8px;}
+
+.empty-state{padding:40px 20px;text-align:center;color:var(--ink-soft);}
+.empty-state .crest{margin:0 auto 14px;opacity:.4;}
+.empty-state h3{margin:0 0 6px;font-size:15px;color:var(--ink);}
+.empty-state p{margin:0;font-size:13px;}
+
+.toast{
+  position:fixed;bottom:26px;right:26px;background:var(--navy-deep);color:#F3EFE3;
+  padding:13px 20px;border-radius:4px;font-size:13.5px;box-shadow:0 8px 24px rgba(22,30,51,0.3);
+  border-left:3px solid var(--gold);opacity:0;transform:translateY(8px);transition:.25s;pointer-events:none;z-index:50;
+}
+.toast.show{opacity:1;transform:translateY(0);}
+
+.modal-back{position:fixed;inset:0;background:rgba(22,30,51,0.45);display:flex;align-items:center;justify-content:center;z-index:40;}
+.modal{background:#fff;border-radius:5px;width:100%;max-width:460px;padding:26px 26px 22px;border-top:4px solid var(--maroon);max-height:88vh;overflow:auto;}
+.modal h3{margin:0 0 4px;font-size:18px;}
+.modal .lede{font-size:13px;color:var(--ink-soft);margin:0 0 18px;}
+.modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:20px;}
+
+.role-badge{font-size:10.5px;text-transform:capitalize;padding:2px 8px;border-radius:20px;background:rgba(185,139,62,0.18);color:var(--gold);border:1px solid rgba(185,139,62,0.4);}
+
+@media (max-width:880px){
+  #loginScreen{flex-direction:column;}
+  .login-visual{padding:36px;}
+  .shell{flex-direction:column;}
+  .sidebar{width:100%;flex-direction:row;align-items:center;overflow-x:auto;}
+  .sidebar-brand{border:none;margin:0;padding:0 12px 0 0;}
+  .nav-group{display:flex;margin:0;gap:2px;}
+  .nav-group-label{display:none;}
+  .sidebar-foot{display:none;}
+  .content{padding:26px 20px;}
+  .stat-grid{grid-template-columns:repeat(2,1fr);}
+  .card-grid{grid-template-columns:1fr;}
+  .two-col{grid-template-columns:1fr;}
+}
+[hidden]{display:none !important;}
+</style>
+</head>
+<body>
+
+<div id="loginScreen">
+  <div class="login-visual">
+    <div class="login-brand">
+      <div class="crest" style="font-size:12.5px;">IIUC</div>
+      <div>
+        <div class="login-brand-sub">International Islamic University Chittagong</div>
+        <div class="login-brand-name">Alumni Portal</div>
+      </div>
+    </div>
+    <div class="login-quote">
+      <h2>Every graduate stays part of this campus.</h2>
+      <p>Find classmates, hear about reunions and job openings first, and give back to the faculties that shaped you — all from one place built for the IIUC alumni community.</p>
+    </div>
+    <div class="login-stats">
+      <div><b>6,400+</b><span>Registered alumni</span></div>
+      <div><b>38</b><span>Batches represented</span></div>
+      <div><b>৳12.4L</b><span>Raised for scholarships</span></div>
+    </div>
+  </div>
+  <div class="login-form-side">
+    <div class="login-card">
+      <div id="loginPane">
+        <h1>Welcome back</h1>
+        <p class="lede">Sign in to your alumni account.</p>
+        <div class="field"><label>Email</label><input type="text" id="loginEmail" placeholder="you@example.com" value="habibul.bari@iiuc-alumni.net"></div>
+        <div class="field"><label>Password</label><input type="password" id="loginPassword" placeholder="••••••••" value="password"></div>
+        <div class="error-msg" id="loginError" hidden></div>
+        <button class="btn btn-primary" onclick="handleLogin()">Sign in</button>
+        <div class="login-toggle">New here? <button onclick="showRegister()">Create an account</button></div>
+        <div class="demo-roles">
+          <button class="btn btn-ghost btn-sm" onclick="quickLogin('admin')">Demo: Admin</button>
+          <button class="btn btn-ghost btn-sm" onclick="quickLogin('alumni')">Demo: Alumni</button>
+          <button class="btn btn-ghost btn-sm" onclick="quickLogin('student')">Demo: Student</button>
+        </div>
+      </div>
+      <div id="registerPane" hidden>
+        <h1>Create your account</h1>
+        <p class="lede">Join the IIUC alumni network.</p>
+        <div class="field"><label>Full name</label><input type="text" id="regName" placeholder="Your name"></div>
+        <div class="field"><label>I am a</label>
+          <select id="regRole">
+            <option value="alumni">Graduate / Alumni</option>
+            <option value="student">Current student</option>
+          </select>
+        </div>
+        <div class="field" id="regBatchField"><label>Graduation year</label><input type="text" id="regBatch" placeholder="e.g. 2021"></div>
+        <div class="field"><label>Email</label><input type="text" id="regEmail" placeholder="you@example.com"></div>
+        <div class="field"><label>Password</label><input type="password" id="regPassword" placeholder="Choose a password"></div>
+        <button class="btn btn-primary" onclick="handleRegister()">Create account</button>
+        <div class="login-toggle">Already registered? <button onclick="showLogin()">Sign in</button></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="shell" id="shell" hidden>
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="crest" style="font-size:10.5px;">IIUC</div>
+      <div class="sidebar-brand-text">IIUC<small>ALUMNI PORTAL</small></div>
+    </div>
+    <div class="nav-group" id="navGroup"></div>
+    <div class="sidebar-foot">
+      <div class="avatar" id="sideAvatar"></div>
+      <div class="who"><b id="sideName"></b><span id="sideRole"></span></div>
+      <button title="Sign out" onclick="handleLogout()">Exit</button>
+    </div>
+  </aside>
+  <main class="content">
+    <div class="page-header">
+      <div class="page-header-row">
+        <div>
+          <h1 id="pageTitle">Dashboard</h1>
+          <p id="pageSub">Overview</p>
+        </div>
+        <div id="pageAction"></div>
+      </div>
+    </div>
+    <div id="viewRoot"></div>
+  </main>
+</div>
+
+<div id="toast" class="toast"></div>
+<div id="modalRoot"></div>
+
+<script>
+const state = {
+  user: null,
+  view: 'dashboard',
+  search: '',
+  filterDept: '',
+  filterYear: '',
+};
+
+const alumni = [
+  {id:1, name:'Habibul Bari', batch:2021, dept:'CSE', job:'Software Engineer, Therap BD', location:'Dhaka', email:'tania.rahman@iiuc-alumni.net'},
+  {id:2, name:'Farhan Kabir', batch:2019, dept:'EEE', job:'Power Systems Engineer, DESCO', location:'Chattogram', email:'farhan.kabir@iiuc-alumni.net'},
+  {id:3, name:'Nusrat Jahan', batch:2020, dept:'CSE', job:'Product Manager, Pathao', location:'Dhaka', email:'nusrat.jahan@iiuc-alumni.net'},
+  {id:4, name:'Imran Hossain', batch:2017, dept:'Civil', job:'Site Engineer, RHD', location:'Sylhet', email:'imran.hossain@iiuc-alumni.net'},
+  {id:5, name:'Sadia Islam', batch:2022, dept:'BBA', job:'Analyst, BRAC Bank', location:'Dhaka', email:'sadia.islam@iiuc-alumni.net'},
+  {id:6, name:'Rakibul Hasan', batch:2018, dept:'CSE', job:'Founder, Loopwise Labs', location:'Chattogram', email:'rakibul.hasan@iiuc-alumni.net'},
+  {id:7, name:'Mahmuda Akter', batch:2020, dept:'EEE', job:'RF Engineer, Grameenphone', location:'Dhaka', email:'mahmuda.akter@iiuc-alumni.net'},
+  {id:8, name:'Zahidul Alam', batch:2016, dept:'Civil', job:'Project Lead, Concord Group', location:'Dhaka', email:'zahidul.alam@iiuc-alumni.net'},
+  ];
+
+const events = [
+  {id:1, title:'Homecoming & Reunion 2026', date:'2026-12-18', venue:'IIUC Auditorium, Kumira Campus', desc:'Annual reunion for all batches with dinner, awards, and a campus tour.', rsvps:['Habibul Bari','Farhan Kabir']},
+  {id:2, title:'Careers in Tech: Panel Discussion', date:'2026-10-05', venue:'CSE Seminar Hall', desc:'Alumni from local and international tech companies share career paths with current students.', rsvps:['Nusrat Jahan']},
+  {id:3, title:'Scholarship Fundraising Gala', date:'2026-11-02', venue:'Radisson Blu, Chattogram', desc:'A formal evening to raise funds for the need-based scholarship program.', rsvps:[]},
+];
+
+const jobs = [
+  {id:1, title:'Junior Backend Developer', company:'Therap BD', postedBy:'Habibul Bari', desc:'Node.js/PostgreSQL role for recent graduates, healthcare software team.'},
+  {id:2, title:'Graduate Trainee — Power Systems', company:'DESCO', postedBy:'Farhan Kabir', desc:'Rotational program for EEE graduates interested in the national grid.'},
+  {id:3, title:'Product Design Intern', company:'Pathao', postedBy:'Nusrat Jahan', desc:'3-month paid internship, open to final-year students.'},
+];
+
+const causes = [
+  {id:1, name:'Need-Based Scholarship Fund', raised:840000, goal:1200000},
+  {id:2, name:'Library Digitization Project', raised:210000, goal:500000},
+];
+const donationLog = [];
+
+const forumPosts = [
+  {id:1, author:'Rakibul Hasan', time:'2 days ago', content:'Any alumni in Chattogram interested in mentoring second-year CSE students this semester? We are putting together an informal group.', comments:[{author:'Mahmuda Akter', text:'Count me in — happy to help with EEE side too.'}]},
+  {id:2, author:'Sadia Islam', time:'5 days ago', content:'Looking for BBA graduates working in banking who could speak at our department seminar next month.', comments:[]},
+];
+
+const accounts = [
+  {id:1, name:'Habibul Bari', role:'alumni', email:'habibul.bari@iiuc-alumni.net', status:'active'},
+  {id:2, name:'Farhan Kabir', role:'alumni', email:'farhan.kabir@iiuc-alumni.net', status:'active'},
+  {id:3, name:'Mizanur Chowdhury', role:'student', email:'mizanur.c@iiuc-alumni.net', status:'active'},
+  {id:4, name:'Old Test Account', role:'alumni', email:'test.old@iiuc-alumni.net', status:'inactive'},
+];
+
+const demoUsers = {
+  admin:{name:'Dr. Salma Chowdhury', role:'admin', email:'salma.chowdhury@iiuc.ac.bd'},
+  alumni:{name:'Habibul Bari', role:'alumni', email:'habibul.bari@iiuc-alumni.net', batch:2021, dept:'CSE'},
+  student:{name:'Mizanur Chowdhury', role:'student', email:'mizanur.c@iiuc-alumni.net'},
+};
+
+function initials(name){
+  return name.split(' ').filter(Boolean).slice(0,2).map(w=>w[0].toUpperCase()).join('');
+}
+
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._timer);
+  t._timer = setTimeout(()=>t.classList.remove('show'), 2600);
+}
+
+function showRegister(){
+  document.getElementById('loginPane').hidden = true;
+  document.getElementById('registerPane').hidden = false;
+}
+function showLogin(){
+  document.getElementById('loginPane').hidden = false;
+  document.getElementById('registerPane').hidden = true;
+}
+
+function handleLogin(){
+  const email = document.getElementById('loginEmail').value.trim();
+  const err = document.getElementById('loginError');
+  if(!email || !document.getElementById('loginPassword').value){
+    err.textContent = 'Enter your email and password to continue.';
+    err.hidden = false;
+    return;
+  }
+  err.hidden = true;
+  const match = Object.values(demoUsers).find(u=>u.email.toLowerCase()===email.toLowerCase());
+  loginAs(match || demoUsers.alumni);
+}
+
+function quickLogin(role){
+  loginAs(demoUsers[role]);
+}
+
+function handleRegister(){
+  const name = document.getElementById('regName').value.trim();
+  const role = document.getElementById('regRole').value;
+  const email = document.getElementById('regEmail').value.trim();
+  if(!name || !email){
+    showToast('Please fill in your name and email.');
+    return;
+  }
+  const newUser = {name, role, email, batch: document.getElementById('regBatch').value || null};
+  showToast('Account created — signing you in.');
+  loginAs(newUser);
+}
+
+function loginAs(user){
+  state.user = user;
+  state.view = 'dashboard';
+  document.getElementById('loginScreen').hidden = true;
+  document.getElementById('shell').hidden = false;
+  document.getElementById('sideAvatar').textContent = initials(user.name);
+  document.getElementById('sideName').textContent = user.name;
+  document.getElementById('sideRole').textContent = user.role;
+  buildNav();
+  render();
+}
+
+function handleLogout(){
+  state.user = null;
+  document.getElementById('shell').hidden = true;
+  document.getElementById('loginScreen').hidden = false;
+  showLogin();
+}
+
+const NAV_BY_ROLE = {
+  admin:[
+    ['dashboard','Dashboard'],
+    ['directory','Alumni Directory'],
+    ['events','Events'],
+    ['jobs','Job Board'],
+    ['donations','Donations'],
+    ['forum','Discussion Forum'],
+    ['admin','Manage Users'],
+  ],
+  alumni:[
+    ['dashboard','Dashboard'],
+    ['directory','Alumni Directory'],
+    ['events','Events'],
+    ['jobs','Job Board'],
+    ['donations','Donations'],
+    ['forum','Discussion Forum'],
+    ['profile','My Profile'],
+  ],
+  student:[
+    ['dashboard','Dashboard'],
+    ['directory','Alumni Directory'],
+    ['events','Events'],
+    ['jobs','Job Board'],
+    ['forum','Discussion Forum'],
+  ],
+};
+
+function buildNav(){
+  const group = document.getElementById('navGroup');
+  group.innerHTML = '';
+  NAV_BY_ROLE[state.user.role].forEach(([key,label])=>{
+    const b = document.createElement('button');
+    b.className = 'nav-item' + (state.view===key ? ' active' : '');
+    b.innerHTML = '<span class="dot"></span>' + label;
+    b.onclick = ()=>{ state.view = key; render(); };
+    group.appendChild(b);
+  });
+}
+
+const TITLES = {
+  dashboard:['Dashboard','A quick view of what is happening across the network'],
+  directory:['Alumni Directory','Search and connect with graduates by batch, department, or location'],
+  events:['Events','Reunions, seminars, and gatherings hosted by the university'],
+  jobs:['Job Board','Opportunities shared by alumni for students and fellow graduates'],
+  donations:['Donations','Support ongoing university causes and scholarship programs'],
+  forum:['Discussion Forum','Conversations between alumni, students, and faculty'],
+  profile:['My Profile','Manage how you appear in the alumni directory'],
+  admin:['Manage Users','Review accounts and platform activity'],
+};
+
+function render(){
+  buildNav();
+  const [title, sub] = TITLES[state.view];
+  document.getElementById('pageTitle').textContent = title;
+  document.getElementById('pageSub').textContent = sub;
+  document.getElementById('pageAction').innerHTML = '';
+  const root = document.getElementById('viewRoot');
+  root.innerHTML = '';
+  const renderers = {
+    dashboard:renderDashboard, directory:renderDirectory, events:renderEvents,
+    jobs:renderJobs, donations:renderDonations, forum:renderForum,
+    profile:renderProfile, admin:renderAdmin,
+  };
+  renderers[state.view](root);
+}
+
+function renderDashboard(root){
+  const role = state.user.role;
+  const stats = role==='admin'
+    ? [[accounts.filter(a=>a.status==='active').length,'Active accounts'],[events.length,'Upcoming events'],[jobs.length,'Open job posts'],[causes.reduce((s,c)=>s+c.raised,0).toLocaleString(),'Taka raised']]
+    : [[alumni.length,'Alumni in directory'],[events.length,'Upcoming events'],[jobs.length,'Open job posts'],[forumPosts.length,'Active discussions']];
+
+  root.innerHTML = `
+    <div class="stat-grid">
+      ${stats.map(([n,l])=>`<div class="stat-card"><b>${n}</b><span>${l}</span></div>`).join('')}
+    </div>
+    <div class="two-col">
+      <div class="panel panel-top-rule panel-pad">
+        <div class="section-title">Upcoming events</div>
+        ${events.slice(0,3).map(e=>`
+          <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--line);">
+            <div><b style="font-size:13.8px;">${e.title}</b><div style="font-size:12.5px;color:var(--ink-soft);">${formatDate(e.date)} · ${e.venue}</div></div>
+            <span class="pill pill-gold">${e.rsvps.length} going</span>
+          </div>`).join('')}
+      </div>
+      <div class="panel panel-top-rule panel-pad">
+        <div class="section-title">Recent discussion</div>
+        ${forumPosts.slice(0,2).map(p=>`
+          <div style="padding:10px 0;border-bottom:1px solid var(--line);">
+            <b style="font-size:13.3px;">${p.author}</b>
+            <p style="font-size:12.8px;color:var(--ink-soft);margin:4px 0 0;">${truncate(p.content,90)}</p>
+          </div>`).join('')}
+      </div>
+    </div>`;
+}
+
+function truncate(s,n){ return s.length>n ? s.slice(0,n)+'…' : s; }
+function formatDate(d){
+  return new Date(d+'T00:00:00').toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
+}
+
+function renderDirectory(root){
+  const depts = [...new Set(alumni.map(a=>a.dept))];
+  const years = [...new Set(alumni.map(a=>a.batch))].sort((a,b)=>b-a);
+  const filtered = alumni.filter(a=>
+    (a.name.toLowerCase().includes(state.search.toLowerCase()) || a.job.toLowerCase().includes(state.search.toLowerCase())) &&
+    (!state.filterDept || a.dept===state.filterDept) &&
+    (!state.filterYear || String(a.batch)===state.filterYear)
+  );
+  root.innerHTML = `
+    <div class="toolbar">
+      <input type="text" id="dirSearch" placeholder="Search by name or job title…" value="${state.search}">
+      <select id="dirDept"><option value="">All departments</option>${depts.map(d=>`<option ${state.filterDept===d?'selected':''}>${d}</option>`).join('')}</select>
+      <select id="dirYear"><option value="">All batches</option>${years.map(y=>`<option ${state.filterYear===String(y)?'selected':''}>${y}</option>`).join('')}</select>
+    </div>
+    <div class="panel">
+      <table>
+        <thead><tr><th>Name</th><th>Batch</th><th>Department</th><th>Current position</th><th>Location</th></tr></thead>
+        <tbody>
+        ${filtered.length ? filtered.map(a=>`
+          <tr>
+            <td><div style="display:flex;align-items:center;gap:10px;"><div class="avatar">${initials(a.name)}</div><div><b>${a.name}</b></div></div></td>
+            <td>${a.batch}</td>
+            <td><span class="pill pill-gray">${a.dept}</span></td>
+            <td>${a.job}</td>
+            <td>${a.location}</td>
+          </tr>`).join('') : `<tr><td colspan="5"><div class="empty-state"><h3>No alumni match this search</h3><p>Try clearing a filter or using a different keyword.</p></div></td></tr>`}
+        </tbody>
+      </table>
+    </div>`;
+  document.getElementById('dirSearch').oninput = e=>{ state.search=e.target.value; renderDirectory(root); };
+  document.getElementById('dirDept').onchange = e=>{ state.filterDept=e.target.value; renderDirectory(root); };
+  document.getElementById('dirYear').onchange = e=>{ state.filterYear=e.target.value; renderDirectory(root); };
+}
+
+function renderEvents(root){
+  if(state.user.role==='admin'){
+    document.getElementById('pageAction').innerHTML = `<button class="btn btn-primary btn-sm" onclick="openEventModal()">New event</button>`;
+  }
+  const you = state.user.name;
+  root.innerHTML = `<div class="card-grid">
+    ${events.map(e=>{
+      const going = e.rsvps.includes(you);
+      return `<div class="entity-card">
+        <div class="entity-card-head">
+          <div class="crest" style="border-radius:4px;">${new Date(e.date+'T00:00:00').getDate()}</div>
+          <div class="meta"><b>${e.title}</b><span>${formatDate(e.date)} · ${e.venue}</span></div>
+        </div>
+        <p>${e.desc}</p>
+        <div class="entity-card-foot">
+          <span class="pill pill-gold">${e.rsvps.length} attending</span>
+          ${state.user.role!=='admin' ? `<button class="btn ${going?'btn-ghost':'btn-primary'} btn-sm" onclick="toggleRsvp(${e.id})">${going?'Cancel RSVP':'RSVP'}</button>` : `<button class="btn btn-ghost btn-sm" onclick="deleteEvent(${e.id})">Remove</button>`}
+        </div>
+      </div>`;
+    }).join('')}
+  </div>`;
+}
+
+function toggleRsvp(id){
+  const e = events.find(e=>e.id===id);
+  const you = state.user.name;
+  const idx = e.rsvps.indexOf(you);
+  if(idx>-1){ e.rsvps.splice(idx,1); showToast('RSVP cancelled.'); }
+  else { e.rsvps.push(you); showToast('You are on the list for ' + e.title + '.'); }
+  render();
+}
+
+function deleteEvent(id){
+  const idx = events.findIndex(e=>e.id===id);
+  if(idx>-1){ events.splice(idx,1); showToast('Event removed.'); render(); }
+}
+
+function openEventModal(){
+  renderModal(`
+    <h3>Create event</h3>
+    <p class="lede">This will be visible to all alumni and students.</p>
+    <div class="field"><label>Title</label><input id="mEvTitle" type="text" placeholder="e.g. Winter Alumni Meetup"></div>
+    <div class="field"><label>Date</label><input id="mEvDate" type="date"></div>
+    <div class="field"><label>Venue</label><input id="mEvVenue" type="text" placeholder="e.g. IIUC Auditorium, Kumira Campus"></div>
+    <div class="field"><label>Description</label><textarea id="mEvDesc" rows="3" placeholder="What should people know?"></textarea></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost btn-sm" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary btn-sm" onclick="submitEvent()">Publish event</button>
+    </div>`);
+}
+
+function submitEvent(){
+  const title = document.getElementById('mEvTitle').value.trim();
+  const date = document.getElementById('mEvDate').value || '2026-12-01';
+  const venue = document.getElementById('mEvVenue').value.trim() || 'Main Campus';
+  const desc = document.getElementById('mEvDesc').value.trim() || 'Details to follow.';
+  if(!title){ showToast('Give the event a title first.'); return; }
+  events.unshift({id:Date.now(), title, date, venue, desc, rsvps:[]});
+  closeModal();
+  showToast('Event published.');
+  render();
+}
+
+function renderJobs(root){
+  if(state.user.role!=='student'){
+    document.getElementById('pageAction').innerHTML = `<button class="btn btn-primary btn-sm" onclick="openJobModal()">Post a job</button>`;
+  }
+  root.innerHTML = `<div class="card-grid">
+    ${jobs.map(j=>`
+      <div class="entity-card">
+        <div class="entity-card-head">
+          <div class="avatar" style="border-radius:4px;">${initials(j.company)}</div>
+          <div class="meta"><b>${j.title}</b><span>${j.company}</span></div>
+        </div>
+        <p>${j.desc}</p>
+        <div class="entity-card-foot">
+          <span class="pill pill-gray">Posted by ${j.postedBy}</span>
+          <button class="btn btn-primary btn-sm" onclick="showToast('Application sent to ${j.company}.')">Apply</button>
+        </div>
+      </div>`).join('')}
+  </div>`;
+}
+
+function openJobModal(){
+  renderModal(`
+    <h3>Post a job</h3>
+    <p class="lede">Visible to alumni and current students.</p>
+    <div class="field"><label>Job title</label><input id="mJobTitle" type="text" placeholder="e.g. Junior Data Analyst"></div>
+    <div class="field"><label>Company</label><input id="mJobCompany" type="text" placeholder="e.g. bKash"></div>
+    <div class="field"><label>Description</label><textarea id="mJobDesc" rows="3" placeholder="Role summary, requirements, how to apply"></textarea></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost btn-sm" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary btn-sm" onclick="submitJob()">Post listing</button>
+    </div>`);
+}
+
+function submitJob(){
+  const title = document.getElementById('mJobTitle').value.trim();
+  const company = document.getElementById('mJobCompany').value.trim();
+  const desc = document.getElementById('mJobDesc').value.trim() || 'No further details provided.';
+  if(!title || !company){ showToast('Add a title and company name.'); return; }
+  jobs.unshift({id:Date.now(), title, company, postedBy:state.user.name, desc});
+  closeModal();
+  showToast('Job listing posted.');
+  render();
+}
+
+function renderDonations(root){
+  root.innerHTML = `<div class="two-col">
+    <div>
+      ${causes.map(c=>{
+        const pct = Math.min(100, Math.round(c.raised/c.goal*100));
+        return `<div class="panel panel-pad" style="margin-bottom:16px;">
+          <div class="section-title" style="margin-bottom:6px;">${c.name}</div>
+          <div class="progress-track"><div class="progress-fill" style="width:${pct}%;"></div></div>
+          <div style="display:flex;justify-content:space-between;font-size:12.5px;color:var(--ink-soft);">
+            <span>৳${c.raised.toLocaleString()} raised</span><span>Goal ৳${c.goal.toLocaleString()}</span>
+          </div>
+          ${state.user.role==='alumni' ? `<button class="btn btn-primary btn-sm" style="margin-top:14px;" onclick="openDonateModal(${c.id})">Donate to this cause</button>` : ''}
+        </div>`;
+      }).join('')}
+    </div>
+    <div class="panel panel-top-rule panel-pad">
+      <div class="section-title">Recent contributions</div>
+      ${donationLog.length ? donationLog.slice().reverse().map(d=>`
+        <div style="display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--line);font-size:13px;">
+          <span>${d.name}</span><b>৳${d.amount.toLocaleString()}</b>
+        </div>`).join('') : `<div class="empty-state"><h3>No contributions yet</h3><p>Donations made in this session will appear here.</p></div>`}
+    </div>
+  </div>`;
+}
+
+function openDonateModal(causeId){
+  renderModal(`
+    <h3>Make a donation</h3>
+    <p class="lede">Contributing to: ${causes.find(c=>c.id===causeId).name}</p>
+    <div class="field"><label>Amount (৳)</label><input id="mDonateAmt" type="text" placeholder="e.g. 5000"></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost btn-sm" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary btn-sm" onclick="submitDonation(${causeId})">Confirm donation</button>
+    </div>`);
+}
+
+function submitDonation(causeId){
+  const amt = parseInt(document.getElementById('mDonateAmt').value, 10);
+  if(!amt || amt<=0){ showToast('Enter a valid amount.'); return; }
+  const cause = causes.find(c=>c.id===causeId);
+  cause.raised += amt;
+  donationLog.push({name:state.user.name, amount:amt, cause:cause.name});
+  closeModal();
+  showToast('Thank you — receipt sent to your email.');
+  render();
+}
+
+function renderForum(root){
+  root.innerHTML = `
+    <div class="panel panel-top-rule panel-pad" style="margin-bottom:20px;">
+      <div class="section-title">Start a discussion</div>
+      <textarea id="newPostText" rows="3" placeholder="Share something with the network…" style="width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:3px;font-size:13.8px;"></textarea>
+      <button class="btn btn-primary btn-sm" style="margin-top:10px;" onclick="submitPost()">Post</button>
+    </div>
+    <div class="panel panel-pad">
+      ${forumPosts.map(p=>`
+        <div class="forum-post">
+          <div class="forum-post-head"><div class="avatar">${initials(p.author)}</div><div><b>${p.author}</b><span> · ${p.time}</span></div></div>
+          <p>${p.content}</p>
+          ${p.comments.map(c=>`<div class="forum-comment"><b>${c.author}</b> — ${c.text}</div>`).join('')}
+          <div style="margin-left:44px;margin-top:8px;display:flex;gap:8px;">
+            <input type="text" placeholder="Write a reply…" id="reply-${p.id}" style="flex:1;padding:7px 10px;border:1px solid var(--line);border-radius:3px;font-size:12.8px;">
+            <button class="btn btn-ghost btn-sm" onclick="submitComment(${p.id})">Reply</button>
+          </div>
+        </div>`).join('')}
+    </div>`;
+}
+
+function submitPost(){
+  const text = document.getElementById('newPostText').value.trim();
+  if(!text){ showToast('Write something before posting.'); return; }
+  forumPosts.unshift({id:Date.now(), author:state.user.name, time:'just now', content:text, comments:[]});
+  showToast('Posted to the forum.');
+  render();
+}
+
+function submitComment(postId){
+  const input = document.getElementById('reply-'+postId);
+  const text = input.value.trim();
+  if(!text) return;
+  forumPosts.find(p=>p.id===postId).comments.push({author:state.user.name, text});
+  render();
+}
+
+function renderProfile(root){
+  const u = state.user;
+  root.innerHTML = `
+    <div class="panel panel-top-rule panel-pad" style="max-width:520px;">
+      <div class="field"><label>Full name</label><input id="pfName" type="text" value="${u.name}"></div>
+      <div class="field"><label>Graduation year</label><input id="pfBatch" type="text" value="${u.batch||''}"></div>
+      <div class="field"><label>Department</label><input id="pfDept" type="text" value="${u.dept||''}"></div>
+      <div class="field"><label>Current position</label><input id="pfJob" type="text" placeholder="e.g. Software Engineer, XYZ"></div>
+      <div class="field"><label>Location</label><input id="pfLocation" type="text" placeholder="City"></div>
+      <div class="field"><label>Profile visibility</label>
+        <select id="pfVisibility"><option>Visible to all alumni</option><option>Visible to my department only</option><option>Private</option></select>
+      </div>
+      <button class="btn btn-primary btn-sm" onclick="saveProfile()">Save changes</button>
+    </div>`;
+}
+
+function saveProfile(){
+  state.user.name = document.getElementById('pfName').value.trim() || state.user.name;
+  document.getElementById('sideName').textContent = state.user.name;
+  showToast('Profile updated.');
+}
+
+function renderAdmin(root){
+  root.innerHTML = `
+    <div class="panel">
+      <table>
+        <thead><tr><th>Name</th><th>Role</th><th>Email</th><th>Status</th><th></th></tr></thead>
+        <tbody>
+        ${accounts.map(a=>`
+          <tr>
+            <td><div style="display:flex;align-items:center;gap:10px;"><div class="avatar">${initials(a.name)}</div><b>${a.name}</b></div></td>
+            <td><span class="pill pill-gray">${a.role}</span></td>
+            <td>${a.email}</td>
+            <td>${a.status==='active' ? '<span class="pill pill-green">Active</span>' : '<span class="pill pill-maroon">Inactive</span>'}</td>
+            <td style="text-align:right;"><button class="btn btn-ghost btn-sm" onclick="toggleAccount(${a.id})">${a.status==='active'?'Deactivate':'Activate'}</button></td>
+          </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>`;
+}
+
+function toggleAccount(id){
+  const a = accounts.find(a=>a.id===id);
+  a.status = a.status==='active' ? 'inactive' : 'active';
+  showToast(a.name + ' is now ' + a.status + '.');
+  render();
+}
+
+function renderModal(html){
+  document.getElementById('modalRoot').innerHTML = `<div class="modal-back" onclick="if(event.target===this)closeModal()"><div class="modal">${html}</div></div>`;
+}
+function closeModal(){
+  document.getElementById('modalRoot').innerHTML = '';
+}
+
+document.getElementById('regRole').addEventListener('change', e=>{
+  document.getElementById('regBatchField').hidden = e.target.value !== 'alumni';
+});
+</script>
+</body>
+</html>
