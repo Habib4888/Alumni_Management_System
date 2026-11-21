@@ -1,7 +1,4 @@
-<<<<<<< HEAD
- https://habib4888.github.io/Alumni_Management_System/
 
-=======
 # IIUC Alumni Portal
 
 A web-based Alumni Management System for **International Islamic University Chittagong (IIUC)**. It connects alumni, current students and the university administration through a single role-based portal.
